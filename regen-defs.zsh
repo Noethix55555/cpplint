@@ -23,8 +23,14 @@ for folder in $folders; do
     stdout_file=$(mktemp)
     stderr_file=$(mktemp)
 
+    # Cleanup on interruption
+    cleanup() {
+      rm "$stdout_file" "$stderr_file"
+    }
+    trap cleanup INT TERM
+
     # Execute the command and capture stdout and stderr
-    uv run "$cpplint" $cmd > "$stdout_file" 2> "$stderr_file"
+    eval uv run "$cpplint" $cmd > "$stdout_file" 2> "$stderr_file"
     ret_code=$?
 
     # Count the number of lines in stdout
@@ -42,7 +48,7 @@ for folder in $folders; do
     } > "$file"
 
     # Clean up temporary files
-    rm "$stdout_file" "$stderr_file"
+    cleanup
   done
   cd ..
 done
