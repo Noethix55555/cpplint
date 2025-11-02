@@ -50,7 +50,7 @@ When you're finished with a pull request, please:
 * add a summary of what your changes do to CHANGELOG.rst
 * specify the problem solved in the pull request
 * make sure that your code passes the tests and lints
-* don't force-push to the branch. These make the commit history messy, and we squash all commits when merging anyways.
+* don't force-push to the branch just to squash everything into a single commit. These make the commit history messy, and we'll squash it when merging anyways.
 
 .. _testing:
 
