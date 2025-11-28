@@ -30,7 +30,7 @@ for folder in $folders; do
     trap cleanup INT TERM
 
     # Execute the command and capture stdout and stderr
-    uv run "$cpplint" ${(~)cmd} > "$stdout_file" 2> "$stderr_file"
+    eval uv run "$cpplint" $cmd > "$stdout_file" 2> "$stderr_file"
     ret_code=$?
 
     # Count the number of lines in stdout
