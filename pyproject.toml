@@ -202,8 +202,11 @@ score = false
 expand_tables = [ "tool.pylint", "tool.pytest.ini_options" ]
 
 [tool.pytest.ini_options]
-addopts = "--color=yes --cov-fail-under=89 --cov=cpplint"
+addopts = "--color=yes --cov-fail-under=95 --cov=cpplint"
 python_files = [ "*test.py" ]
 required_plugins = [ "pytest-cov", "pytest-timeout" ]
 testpaths = [ "." ]
 timeout = 481
+
+[tool.coverage]
+run.patch = [ "subprocess" ]
