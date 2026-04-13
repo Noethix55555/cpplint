@@ -312,6 +312,14 @@ class TestCpplint(CpplintTestBase):
             "Do not indent within a namespace.  [whitespace/indent_namespace] [4]",
         ]
 
+        # In a namespace, but not *directly*
+        lines = [
+            "namespace Lumi {",
+            "class Outie {",
+            "    class Innie {",
+        ]
+        assert self.GetNamespaceResults(lines) == ""
+
     def testNamespaceIndentationIndentedParameter(self):
         lines = [
             "namespace Test {",
@@ -3761,6 +3769,18 @@ class TestCpplint(CpplintTestBase):
         self.TestBlankLinesCheck(
             ["int x(\n", "    int a) const {\n", "\n", "return 0;\n", "}"], 0, 0
         )
+        self.TestBlankLinesCheck(
+            [
+                "Foo::Foo()\n",
+                "    : bar(),\n",
+                "      qi() {\n",
+                "\n",
+                "  DoSomething();\n",
+                "}",
+            ],
+            0,
+            0,
+        )
         self.TestBlankLinesCheck(["int x(\n", "     int a) {\n", "\n", "return 0;\n", "}"], 1, 0)
         self.TestBlankLinesCheck(["int x(\n", "   int a) {\n", "\n", "return 0;\n", "}"], 1, 0)
 
@@ -5795,6 +5815,10 @@ func2();""",
         self.TestLint(
             '#include "bar.hh"',
             "Include the directory when naming header files  [build/include_subdir] [4]",
+        )
+        self.TestLint(
+            '#include "package/impl.c++"',
+            "Do not include .c++ files from other packages  [build/include] [4]",
         )
         self.TestLint('#include "baz.aa"', "")
         self.TestLint('#include "dir/foo.h"', "")
