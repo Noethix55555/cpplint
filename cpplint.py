@@ -7715,7 +7715,8 @@ def ProcessFile(filename, vlevel, extra_check_functions=None):
     # should rely on the extension.
     if filename != "-" and file_extension not in GetAllExtensions():
         _cpplint_state.PrintError(
-            f"Ignoring {filename}; not a valid file name ({(', '.join(GetAllExtensions()))})\n"
+            f"Ignoring {filename}; not a valid file name "
+            f"({(', '.join(sorted(GetAllExtensions())))})\n"
         )
     else:
         ProcessFileData(filename, file_extension, lines, Error, extra_check_functions)
