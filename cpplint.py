@@ -949,7 +949,6 @@ _FILTER_SHORTCUTS = {
 # The root directory used for deriving header guard CPP variable.
 # This is set by --root flag.
 _root = None
-_root_debug = False
 
 # The top level repository directory. If set, _root is calculated relative to
 # this directory instead of the directory containing version control artifacts.
@@ -2553,16 +2552,8 @@ def GetHeaderGuardCPPVariable(filename):
     file_path_from_root = fileinfo.RepositoryName()
 
     def FixupPathFromRoot():
-        if _root_debug:
-            sys.stderr.write(
-                f"\n_root fixup, _root = '{_root}',"
-                f" repository name = '{fileinfo.RepositoryName()}'\n"
-            )
-
         # Process the file path with the --root flag if it was set.
         if not _root:
-            if _root_debug:
-                sys.stderr.write("_root unspecified\n")
             return file_path_from_root
 
         def StripListPrefix(lst, prefix):
@@ -2575,13 +2566,6 @@ def GetHeaderGuardCPPVariable(filename):
         # root behavior:
         #   --root=subdir , lstrips subdir from the header guard
         maybe_path = StripListPrefix(PathSplitToList(file_path_from_root), PathSplitToList(_root))
-
-        if _root_debug:
-            sys.stderr.write(
-                ("_root lstrip (maybe_path=%s, file_path_from_root=%s," + " _root=%s)\n")
-                % (maybe_path, file_path_from_root, _root)
-            )
-
         if maybe_path:
             return os.path.join(*maybe_path)
 
@@ -2589,20 +2573,9 @@ def GetHeaderGuardCPPVariable(filename):
         full_path = fileinfo.FullName()
         # adapt slashes for windows
         root_abspath = os.path.abspath(_root).replace("\\", "/")
-
         maybe_path = StripListPrefix(PathSplitToList(full_path), PathSplitToList(root_abspath))
-
-        if _root_debug:
-            sys.stderr.write(
-                ("_root prepend (maybe_path=%s, full_path=%s, " + "root_abspath=%s)\n")
-                % (maybe_path, full_path, root_abspath)
-            )
-
         if maybe_path:
             return os.path.join(*maybe_path)
-
-        if _root_debug:
-            sys.stderr.write(f"_root ignore, returning {file_path_from_root}\n")
 
         #   --root=FAKE_DIR is ignored
         return file_path_from_root
