@@ -54,7 +54,6 @@ import os
 import re
 import string
 import sys
-import sysconfig
 import unicodedata
 import xml.etree.ElementTree
 
@@ -4333,6 +4332,7 @@ def CheckSpacing(filename, clean_lines, linenum, nesting_state, error):
         #                This ignores whitespace at the start of a namespace block
         #                because those are not usually indented.
         if prevbrace != -1 and prev_line[prevbrace:].find("}") == -1:
+            # TODO(aaronliu0130): where is this exception in the style guide?
             # OK, we have a blank line at the start of a code block.  Before we
             # complain, we check if it is an exception to the rule: The previous
             # non-empty line has the parameters of a function header that are indented
@@ -5549,16 +5549,6 @@ def GetLineWidth(line):
             if unicodedata.east_asian_width(uc) in ("W", "F"):
                 width += 2
             elif not unicodedata.combining(uc):
-                # Issue 337
-                # https://mail.python.org/pipermail/python-list/2012-August/628809.html
-                if (sys.version_info.major, sys.version_info.minor) <= (3, 2):
-                    # https://github.com/python/cpython/blob/2.7/Include/unicodeobject.h#L81
-                    is_wide_build = sysconfig.get_config_var("Py_UNICODE_SIZE") >= 4
-                    # https://github.com/python/cpython/blob/2.7/Objects/unicodeobject.c#L564
-                    is_low_surrogate = 0xDC00 <= ord(uc) <= 0xDFFF
-                    if not is_wide_build and is_low_surrogate:
-                        width -= 1
-
                 width += 1
         return width
     return len(line)
@@ -5896,7 +5886,7 @@ def CheckIncludeLine(filename, clean_lines, linenum, include_state, error):
                     linenum,
                     "build/include",
                     4,
-                    "Do not include ." + extension + " files from other packages",
+                    f"Do not include .{extension} files from other packages",
                 )
                 return
 
@@ -6215,8 +6205,8 @@ def CheckLanguage(
             if not tok:
                 continue
             if re.match(r"\d+", tok):
-                continue
-            if re.match(r"0[xX][0-9a-fA-F]+", tok):
+                # Matches both decimals and other integer literals
+                # since the latter have to be prefixed by 0-something
                 continue
             if re.match(r"k[A-Z0-9]\w*", tok):
                 continue
@@ -6415,6 +6405,7 @@ def IsOutOfLineMethodDefinition(clean_lines, linenum):
     return False
 
 
+# TODO(aaronliu0130): unify this with MemInitList logic ending ShouldCheckNamespaceIndentation()
 def IsInitializerList(clean_lines, linenum):
     """Check if current line is inside constructor initializer list.
 
@@ -7347,10 +7338,12 @@ def IsBlockInNameSpace(nesting_state: NestingState, is_forward_declaration: bool
             and isinstance(nesting_state.previous_stack_top, _NamespaceInfo)
             and (
                 isinstance(nesting_state.stack[-2], _NamespaceInfo)
-                or len(nesting_state.stack) > 2  # Accommodate for WrappedInfo
-                and issubclass(type(nesting_state.stack[-1]), _WrapInfo)
-                and not nesting_state.stack[-2].seen_open_brace
-                and isinstance(nesting_state.stack[-3], _NamespaceInfo)
+                or (
+                    len(nesting_state.stack) > 2  # Accommodate for WrappedInfo
+                    and issubclass(type(nesting_state.stack[-1]), _WrapInfo)
+                    and not nesting_state.stack[-2].seen_open_brace
+                    and isinstance(nesting_state.stack[-3], _NamespaceInfo)
+                )
             )
         ):
             return True
@@ -7701,6 +7694,7 @@ def ProcessFile(filename, vlevel, extra_check_functions=None):
         return
 
     try:
+        # TODO(aaronliu0130): Add a clitest for this
         # Support the UNIX convention of using "-" for stdin.
         if filename == "-":
             lines = sys.stdin.read().split("\n")
