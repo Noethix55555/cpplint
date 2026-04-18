@@ -199,14 +199,15 @@ reports = false
 score = false
 
 [tool.pyproject-fmt]
-expand_tables = [ "tool.pylint", "tool.pytest.ini_options" ]
+expand_tables = [ "tool.pylint" ]
 
-[tool.pytest.ini_options]
-addopts = "--color=yes --cov-fail-under=95 --cov=cpplint"
+[tool.pytest]
+addopts = [ "--color=yes", "--cov-fail-under=95", "--cov=cpplint" ]
 python_files = [ "*test.py" ]
 required_plugins = [ "pytest-cov", "pytest-timeout" ]
 testpaths = [ "." ]
-timeout = 481
+timeout = "481"
+tmp_path_retention_policy = "all"
 
 [tool.coverage]
 run.patch = [ "subprocess" ]
