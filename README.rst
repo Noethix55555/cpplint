@@ -25,7 +25,7 @@ cpplint - static code checker for C++
 
 Cpplint is a command-line tool to check C/C++ files for style issues according to `Google's C++ style guide <http://google.github.io/styleguide/cppguide.html>`_.
 
-Cpplint is a friendly fork of Google's original tool at `google/styleguide <https://github.com/google/styleguide>`_. Nowadays, `Google is no longer maintaining their public version of cpplint <https://github.com/google/styleguide/pull/528#issuecomment-592315430>`_, and many issues and pull requests remain unimplemented.
+Cpplint is a friendly fork of Google's original tool at `google/styleguide <https://github.com/google/styleguide>`_. Nowadays, `Google no longer maintains a public version of cpplint <https://github.com/google/styleguide/pull/528#issuecomment-592315430>`_, and many issues and pull requests remain unimplemented.
 
 This fork aims to update cpplint to modern specifications, and be (somewhat) more open to adding fixes and features to make cpplint usable in wider contexts.
 
