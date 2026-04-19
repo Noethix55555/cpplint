@@ -25,7 +25,7 @@ cpplint - static code checker for C++
 
 Cpplint is a command-line tool to check C/C++ files for style issues according to `Google's C++ style guide <http://google.github.io/styleguide/cppguide.html>`_.
 
-Cpplint used to be developed and maintained by Google Inc. at `google/styleguide <https://github.com/google/styleguide>`_. Nowadays, `Google is no longer maintaining the public version of cpplint <https://github.com/google/styleguide/pull/528#issuecomment-592315430>`_, and pretty much everything in their repo's PRs and issues about cpplint have gone unimplemented.
+Cpplint is a friendly fork of Google's original tool at `google/styleguide <https://github.com/google/styleguide>`_. Nowadays, `Google is no longer maintaining their public version of cpplint <https://github.com/google/styleguide/pull/528#issuecomment-592315430>`_, and many issues and pull requests remain unimplemented.
 
 This fork aims to update cpplint to modern specifications, and be (somewhat) more open to adding fixes and features to make cpplint usable in wider contexts.
 
@@ -33,11 +33,17 @@ This fork aims to update cpplint to modern specifications, and be (somewhat) mor
 Installation
 ============
 
-Use [`pipx`](https://pipx.pypa.io) to install cpplint from PyPI, run:
+Use `pipx <https://pipx.pypa.io>`_ to install cpplint from PyPI, run:
 
 .. code-block:: bash
 
     $ pipx install cpplint
+
+Or use `uv <https://docs.astral.sh/uv>`_ to install cpplint from PyPI, run:
+
+.. code-block:: bash
+
+    $ uv tool install cpplint
 
 Usage
 -----
@@ -56,7 +62,7 @@ cpplint can also be run as a pre-commit hook by adding to `.pre-commit-config.ya
 .. code-block:: yaml
 
   - repo: https://github.com/cpplint/cpplint
-    rev: 2.0.0
+    rev: 2.0.2
     hooks:
       - id: cpplint
         args:
@@ -65,14 +71,14 @@ cpplint can also be run as a pre-commit hook by adding to `.pre-commit-config.ya
 Changes
 =======
 
-* python 3 compatibility
-* more default file extensions
-* customizable file extensions with the --extensions argument
-* continuous integration on github
-* support for recursive file discovery via the --recursive argument
-* support for excluding files via --exclude
+* Python 3 compatibility
 * JUnit XML output format
-* Overriding repository root auto-detection via --repository
+* More default file extensions
+* Continuous integration on GitHub
+* Support for excluding files via ``--exclude``
+* Customizable file extensions with the ``--extensions`` argument
+* Support for recursive file discovery via the ``--recursive`` argument
+* Overriding repository root auto-detection via ``--repository``
 * Support ``#pragma once`` as an alternative to header include guards
 * ... and `quite a bit <https://github.com/cpplint/cpplint/blob/develop/CHANGELOG.rst>`_ more
 
@@ -87,6 +93,7 @@ Maintainers
 -----------
 
 * `@aaronliu0130 <https://github.com/aaronliu0130>`_
+* `@cclauss <https://github.com/cclauss>`_
 * `@jayvdb <https://github.com/jayvdb>`_
 
 Former
