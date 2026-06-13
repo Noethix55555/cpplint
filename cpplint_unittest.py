@@ -3248,6 +3248,8 @@ class TestCpplint(CpplintTestBase):
         self.TestLint("a<<b", "Missing spaces around <<  [whitespace/operators] [3]")
         self.TestLint("10LL<<20", "")
         self.TestLint("10ULL<<20", "")
+        self.TestLint("10U<<20", "")
+        self.TestLint("10u<<20", "")
         self.TestLint("a>>b", "Missing spaces around >>  [whitespace/operators] [3]")
         self.TestLint("10>>b", "Missing spaces around >>  [whitespace/operators] [3]")
         self.TestLint("LOG(ERROR)<<*foo", "Missing spaces around <<  [whitespace/operators] [3]")
